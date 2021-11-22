@@ -1,6 +1,6 @@
-package pl.edu.agh.kis.pz1.gameLogic;
+package pl.edu.agh.kis.pz1.game_logic;
 
-import pl.edu.agh.kis.pz1.gameExceptions.BadMoveException;
+import pl.edu.agh.kis.pz1.game_exceptions.BadMoveException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,19 +83,18 @@ public class GameMove {
     }
 
     public List<Integer> getCardsToExchange() {
+        List<Integer> cardsIndexes = new ArrayList<>();
+
         if (gameMoveType != GameMoveType.EXCHANGE) {
-            return null;
+            return cardsIndexes;
         }
 
-        List<Integer> cardsIndexes = new ArrayList<>();
         for (int i = 1; i <= 5; i++) {
             if (parameter.contains(String.valueOf(i))) {
                 cardsIndexes.add(i);
             }
         }
-        if (cardsIndexes.size() == 0) {
-            cardsIndexes.add(0);
-        }
+
         return cardsIndexes;
     }
 }

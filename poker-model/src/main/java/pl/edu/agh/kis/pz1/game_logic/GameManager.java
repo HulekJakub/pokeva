@@ -1,10 +1,10 @@
-package pl.edu.agh.kis.pz1.gameLogic;
+package pl.edu.agh.kis.pz1.game_logic;
 
 
-import pl.edu.agh.kis.pz1.gameExceptions.BadMoveException;
-import pl.edu.agh.kis.pz1.gameExceptions.NotEnoughMoneyException;
-import pl.edu.agh.kis.pz1.gameExceptions.NumberOfPlayersOutOfBoundsException;
-import pl.edu.agh.kis.pz1.gameExceptions.PlayerOfThisIdAlreadyExistsException;
+import pl.edu.agh.kis.pz1.game_exceptions.BadMoveException;
+import pl.edu.agh.kis.pz1.game_exceptions.NotEnoughMoneyException;
+import pl.edu.agh.kis.pz1.game_exceptions.NumberOfPlayersOutOfBoundsException;
+import pl.edu.agh.kis.pz1.game_exceptions.PlayerOfThisIdAlreadyExistsException;
 
 import java.util.List;
 
@@ -42,11 +42,11 @@ public class GameManager {
         if(!s.matches("^\\w+\\s+\\w+\\s+[A-Z]+\\s+\\d*")){
             throw new BadMoveException("Move doesn't follow \"PLAYERID GAMEID MOVE PARAMETER\"", true);
         }
-
+        return null;
     }
 
     public String resolveMove(GameMove gameMove){
-        if
+
         switch (gamePhase){
             case ANTE: resolveAnte(gameMove);break;
             case BET1: case BET2: resolveBet(gameMove);break;
@@ -58,6 +58,7 @@ public class GameManager {
             gamePhase = gamePhase.nextPhase();
             currentPlayerId = playersIds.get(0);
         }
+        return null;
     }
 
     private void mainLoop(){
@@ -81,7 +82,7 @@ public class GameManager {
     private void resolveAnte(GameMove gameMove) {
         for (String playerId: playersIds){
             try{
-                game.getPlayer(.betMoney(ante));
+                game.getPlayer(playerId).betMoney(ante);
             } catch (NotEnoughMoneyException notEnoughMoney){
 
             }

@@ -1,8 +1,6 @@
-package pl.edu.agh.kis.pz1.gameAsstes;
+package pl.edu.agh.kis.pz1.game_assets;
 
 import org.junit.Before;
-import pl.edu.agh.kis.pz1.gameAssets.Card;
-import pl.edu.agh.kis.pz1.gameAssets.Deck;
 
 import java.util.HashSet;
 import java.util.Set;

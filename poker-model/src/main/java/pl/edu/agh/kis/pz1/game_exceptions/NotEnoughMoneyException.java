@@ -1,4 +1,4 @@
-package pl.edu.agh.kis.pz1.gameExceptions;
+package pl.edu.agh.kis.pz1.game_exceptions;
 
 public class NotEnoughMoneyException extends Exception {
 

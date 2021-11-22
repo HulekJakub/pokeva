@@ -1,4 +1,4 @@
-package pl.edu.agh.kis.pz1.gameAssets;
+package pl.edu.agh.kis.pz1.game_assets;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,7 +34,7 @@ public class Deck {
      * If deck is empty returns null
      */
     public Card popFirst()  {
-        if(cards.size() == 0){
+        if(cards.isEmpty()){
             return null;
         }
         return cards.get(0);

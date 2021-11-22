@@ -1,4 +1,4 @@
-package pl.edu.agh.kis.pz1.gameAssets;
+package pl.edu.agh.kis.pz1.game_assets;
 
 /**
  * Class implementing a standard card
@@ -42,11 +42,11 @@ public class Card {
         return suit == card.suit && rank == card.rank;
     }
 
-    public pl.edu.agh.kis.pz1.gameAssets.Card.Rank getRank() {
+    public pl.edu.agh.kis.pz1.game_assets.Card.Rank getRank() {
         return rank;
     }
 
-    public pl.edu.agh.kis.pz1.gameAssets.Card.Suit getSuit() {
+    public pl.edu.agh.kis.pz1.game_assets.Card.Suit getSuit() {
         return suit;
     }
 }

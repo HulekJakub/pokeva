@@ -1,9 +1,9 @@
-package pl.edu.agh.kis.pz1.gameLogic;
+package pl.edu.agh.kis.pz1.game_logic;
 
-import pl.edu.agh.kis.pz1.gameAssets.Deck;
-import pl.edu.agh.kis.pz1.gameExceptions.NotEnoughMoneyException;
-import pl.edu.agh.kis.pz1.gameExceptions.NumberOfPlayersOutOfBoundsException;
-import pl.edu.agh.kis.pz1.gameExceptions.PlayerOfThisIdAlreadyExistsException;
+import pl.edu.agh.kis.pz1.game_assets.Deck;
+import pl.edu.agh.kis.pz1.game_exceptions.NotEnoughMoneyException;
+import pl.edu.agh.kis.pz1.game_exceptions.NumberOfPlayersOutOfBoundsException;
+import pl.edu.agh.kis.pz1.game_exceptions.PlayerOfThisIdAlreadyExistsException;
 
 import java.util.*;
 
@@ -83,8 +83,8 @@ public class Game {
         deck.shuffle();
     }
 
-    public void takeMoney(String PlayerId, int money) throws NotEnoughMoneyException {
-        players.get(PlayerId).betMoney(money);
+    public void takeMoney(String playerId, int money) throws NotEnoughMoneyException {
+        players.get(playerId).betMoney(money);
     }
 
     public Player getPlayer(String playerId){

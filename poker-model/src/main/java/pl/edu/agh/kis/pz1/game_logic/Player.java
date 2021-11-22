@@ -1,7 +1,7 @@
-package pl.edu.agh.kis.pz1.gameLogic;
+package pl.edu.agh.kis.pz1.game_logic;
 
-import pl.edu.agh.kis.pz1.gameAssets.Card;
-import pl.edu.agh.kis.pz1.gameExceptions.NotEnoughMoneyException;
+import pl.edu.agh.kis.pz1.game_assets.Card;
+import pl.edu.agh.kis.pz1.game_exceptions.NotEnoughMoneyException;
 
 import java.util.ArrayList;
 import java.util.List;
