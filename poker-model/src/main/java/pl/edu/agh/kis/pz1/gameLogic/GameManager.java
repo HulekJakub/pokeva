@@ -79,9 +79,9 @@ public class GameManager {
     }
 
     private void resolveAnte(GameMove gameMove) {
-        for (Player player: players){
+        for (String playerId: playersIds){
             try{
-                player.betMoney(ante);
+                game.getPlayer(.betMoney(ante));
             } catch (NotEnoughMoneyException notEnoughMoney){
 
             }
