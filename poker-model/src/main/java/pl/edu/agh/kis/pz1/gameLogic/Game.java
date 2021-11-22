@@ -1,9 +1,9 @@
 package pl.edu.agh.kis.pz1.gameLogic;
 
 import pl.edu.agh.kis.pz1.gameAssets.Deck;
-import pl.edu.agh.kis.pz1.gameExceptions.NotEnoughMoney;
-import pl.edu.agh.kis.pz1.gameExceptions.NumberOfPlayersOutOfBounds;
-import pl.edu.agh.kis.pz1.gameExceptions.PlayerOfThisIdAlreadyExists;
+import pl.edu.agh.kis.pz1.gameExceptions.NotEnoughMoneyException;
+import pl.edu.agh.kis.pz1.gameExceptions.NumberOfPlayersOutOfBoundsException;
+import pl.edu.agh.kis.pz1.gameExceptions.PlayerOfThisIdAlreadyExistsException;
 
 import java.util.*;
 
@@ -22,11 +22,11 @@ public class Game {
     /**
      * Creates a player with given id to game unless he already exists
      * @param playerId playerID to initialize new player with
-     * @throws PlayerOfThisIdAlreadyExists thrown when player of given ID already exists
+     * @throws PlayerOfThisIdAlreadyExistsException thrown when player of given ID already exists
      */
-    public void addPlayer(String playerId) throws PlayerOfThisIdAlreadyExists {
+    public void addPlayer(String playerId) throws PlayerOfThisIdAlreadyExistsException {
         if(players.get(playerId) == null){
-            throw new PlayerOfThisIdAlreadyExists("Player with ID " + playerId + "already exists", playerId);
+            throw new PlayerOfThisIdAlreadyExistsException("Player with ID " + playerId + "already exists", playerId);
         }
         players.put(playerId, new Player(playerId));
     }
@@ -44,11 +44,11 @@ public class Game {
      * Initializes game data
      * @param startingMoney money every player starts with
      * @param ante amount of money players are obligated to spend
-     * @throws NumberOfPlayersOutOfBounds number of players is out of 2-4 bounds
+     * @throws NumberOfPlayersOutOfBoundsException number of players is out of 2-4 bounds
      */
-    public void initializeGame(int startingMoney, int ante) throws NumberOfPlayersOutOfBounds {
+    public void initializeGame(int startingMoney, int ante) throws NumberOfPlayersOutOfBoundsException {
         if(players.size() < 2 || players.size() > 4){
-            throw new NumberOfPlayersOutOfBounds("Invalid number of players: " + players.size(), players.size());
+            throw new NumberOfPlayersOutOfBoundsException("Invalid number of players: " + players.size(), players.size());
         }
 
         this.ante = ante;
@@ -83,7 +83,7 @@ public class Game {
         deck.shuffle();
     }
 
-    public void takeMoney(String PlayerId, int money) throws NotEnoughMoney {
+    public void takeMoney(String PlayerId, int money) throws NotEnoughMoneyException {
         players.get(PlayerId).betMoney(money);
     }
 

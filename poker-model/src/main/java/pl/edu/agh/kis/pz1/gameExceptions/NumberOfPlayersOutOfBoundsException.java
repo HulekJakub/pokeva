@@ -1,9 +1,9 @@
 package pl.edu.agh.kis.pz1.gameExceptions;
 
-public class NumberOfPlayersOutOfBounds extends Exception{
+public class NumberOfPlayersOutOfBoundsException extends Exception{
     private final int numberOfPlayers;
 
-    public NumberOfPlayersOutOfBounds(String s, int numberOfPlayers){
+    public NumberOfPlayersOutOfBoundsException(String s, int numberOfPlayers){
         super(s);
         this.numberOfPlayers = numberOfPlayers;
     }

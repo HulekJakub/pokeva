@@ -1,9 +1,9 @@
 package pl.edu.agh.kis.pz1.gameExceptions;
 
-public class PlayerOfThisIdAlreadyExists extends Exception{
+public class PlayerOfThisIdAlreadyExistsException extends Exception{
     private final String playerId;
 
-    public PlayerOfThisIdAlreadyExists(String s, String playerId){
+    public PlayerOfThisIdAlreadyExistsException(String s, String playerId){
         super(s);
         this.playerId = playerId;
     }

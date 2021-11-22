@@ -1,10 +1,10 @@
 package pl.edu.agh.kis.pz1.gameLogic;
 
 
-import pl.edu.agh.kis.pz1.gameExceptions.BadMove;
-import pl.edu.agh.kis.pz1.gameExceptions.NotEnoughMoney;
-import pl.edu.agh.kis.pz1.gameExceptions.NumberOfPlayersOutOfBounds;
-import pl.edu.agh.kis.pz1.gameExceptions.PlayerOfThisIdAlreadyExists;
+import pl.edu.agh.kis.pz1.gameExceptions.BadMoveException;
+import pl.edu.agh.kis.pz1.gameExceptions.NotEnoughMoneyException;
+import pl.edu.agh.kis.pz1.gameExceptions.NumberOfPlayersOutOfBoundsException;
+import pl.edu.agh.kis.pz1.gameExceptions.PlayerOfThisIdAlreadyExistsException;
 
 import java.util.List;
 
@@ -37,10 +37,10 @@ public class GameManager {
     private GamePhase gamePhase = GamePhase.ANTE;
     private String currentPlayerId;
 
-    public GameMove stringToGameMove(String s) throws BadMove{
+    public GameMove stringToGameMove(String s) throws BadMoveException {
         s = s.toUpperCase();
         if(!s.matches("^\\w+\\s+\\w+\\s+[A-Z]+\\s+\\d*")){
-            throw new BadMove("Move doesn't follow \"PLAYERID GAMEID MOVE PARAMETER\"", true);
+            throw new BadMoveException("Move doesn't follow \"PLAYERID GAMEID MOVE PARAMETER\"", true);
         }
 
     }
@@ -82,7 +82,7 @@ public class GameManager {
         for (Player player: players){
             try{
                 player.betMoney(ante);
-            } catch (NotEnoughMoney notEnoughMoney){
+            } catch (NotEnoughMoneyException notEnoughMoney){
 
             }
         }
@@ -113,7 +113,7 @@ public class GameManager {
         this.gameId = gameId;
     }
 
-    public boolean createPlayer(String playerId) throws PlayerOfThisIdAlreadyExists {
+    public boolean createPlayer(String playerId) throws PlayerOfThisIdAlreadyExistsException {
         game.addPlayer(playerId);
         return true;
     }
@@ -122,7 +122,7 @@ public class GameManager {
         return game.removePlayer(playerId);
     }
 
-    public void startGame() throws NumberOfPlayersOutOfBounds {
+    public void startGame() throws NumberOfPlayersOutOfBoundsException {
         game.initializeGame(startingMoney, ante);
         playersIds = game.getPlayersIds();
         currentPlayerId = playersIds.get(0);

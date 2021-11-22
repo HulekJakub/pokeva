@@ -1,6 +1,6 @@
 package pl.edu.agh.kis.pz1.gameLogic;
 
-import pl.edu.agh.kis.pz1.gameExceptions.BadMove;
+import pl.edu.agh.kis.pz1.gameExceptions.BadMoveException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,28 +16,28 @@ public class GameMove {
     private String parameter;
 
 
-    public GameMove(Game game, String playerId, String gameMoveType, String parameter) throws BadMove {
+    public GameMove(Game game, String playerId, String gameMoveType, String parameter) throws BadMoveException {
         this.gameMoveType = GameMoveType.valueOf(gameMoveType);
         this.playerId = playerId;
         this.game = game;
         setParameter(parameter);
     }
 
-    private void setParameter(String parameter) throws BadMove {
+    private void setParameter(String parameter) throws BadMoveException {
         if (gameMoveType == GameMoveType.EXCHANGE && !isExchangeParameterValid(parameter)) {
-            throw new BadMove("Your parameter for EXCHANGE move is improper.\n" +
+            throw new BadMoveException("Your parameter for EXCHANGE move is improper.\n" +
                     "It should be a string with maximal length of 5 and contain only digits from set {1, 2, 3, 4, 5}\n" +
                     "where empty string means no exchange and digits mean which card to change.", true);
         }
         if(gameMoveType == GameMoveType.BET && !isBetParameterValid(parameter)){
-            throw new BadMove("BET move's parameter should be a positive number.\n" +
+            throw new BadMoveException("BET move's parameter should be a positive number.\n" +
                     "If it's greater than your money, move will be changed to ALLIN.", true);
         }
         if(parameter.length() != 0 && (gameMoveType == GameMoveType.PASS ||
                 gameMoveType == GameMoveType.CHECK ||
                 gameMoveType == GameMoveType.ALLIN)){
             this.parameter = parameter;
-            throw new BadMove("You don't need to add a parameter to PASS, CHECK and ALLIN moves.", false);
+            throw new BadMoveException("You don't need to add a parameter to PASS, CHECK and ALLIN moves.", false);
         }
         this.parameter = parameter;
     }

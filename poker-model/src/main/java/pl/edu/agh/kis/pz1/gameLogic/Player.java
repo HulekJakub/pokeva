@@ -1,7 +1,7 @@
 package pl.edu.agh.kis.pz1.gameLogic;
 
 import pl.edu.agh.kis.pz1.gameAssets.Card;
-import pl.edu.agh.kis.pz1.gameExceptions.NotEnoughMoney;
+import pl.edu.agh.kis.pz1.gameExceptions.NotEnoughMoneyException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,9 +37,9 @@ public class Player {
      * Changes player money by given value
      * @param bet int
      */
-    public void betMoney(int bet) throws NotEnoughMoney {
+    public void betMoney(int bet) throws NotEnoughMoneyException {
         if(bet >= playersMoney){
-            throw new NotEnoughMoney("You cannot bet more than you own.\nUse ALLIN or PASS move instead.");
+            throw new NotEnoughMoneyException("You cannot bet more than you own.\nUse ALLIN or PASS move instead.");
         }
         betMoney += bet;
         playersMoney -= bet;
