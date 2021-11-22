@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/poker-client/poker-client.iml" filepath="$PROJECT_DIR$/poker-client/poker-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/poker-common/poker-common.iml" filepath="$PROJECT_DIR$/poker-common/poker-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/poker-model/poker-model.iml" filepath="$PROJECT_DIR$/poker-model/poker-model.iml" />
+      <module fileurl="file://$PROJECT_DIR$/poker-server/poker-server.iml" filepath="$PROJECT_DIR$/poker-server/poker-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pokeva.iml" filepath="$PROJECT_DIR$/pokeva.iml" />
+    </modules>
+  </component>
+</project>
