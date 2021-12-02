@@ -1,7 +1,6 @@
 package pl.edu.agh.kis.pz1.game_logic;
 
 import pl.edu.agh.kis.pz1.game_assets.Card;
-import pl.edu.agh.kis.pz1.game_exceptions.NotEnoughMoneyException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +10,7 @@ import java.util.List;
  */
 
 public class Player {
-    private List<Card> hand = new ArrayList<>();
+    private final List<Card> hand = new ArrayList<>();
     private final String playerId;
     private int playersMoney = 0;
     private int betMoney = 0;
@@ -37,12 +36,14 @@ public class Player {
      * Changes player money by given value
      * @param bet int
      */
-    public void betMoney(int bet) throws NotEnoughMoneyException {
-        if(bet >= playersMoney){
-            throw new NotEnoughMoneyException("You cannot bet more than you own.\nUse ALLIN or PASS move instead.");
+    public String betMoney(int bet){
+        if(bet > playersMoney){
+            pass();
+            return playerId + " has not enough money: forcing a pass.\n";
         }
         betMoney += bet;
         playersMoney -= bet;
+        return "";
     }
 
     public void takeMoney(int toTake){
@@ -81,6 +82,46 @@ public class Player {
         betMoney = 0;
     }
 
+    public boolean winsWith(Player otherPlayer){
+        int handComparison = Hands.handType(this).compareTo(Hands.handType(otherPlayer));
+        if(handComparison < 0){
+            return true;
+        } else if(handComparison > 0){
+            return false;
+        }
+
+        for (Card.Rank rank: Card.Rank.values()){
+            if(hasCardWithRank(rank) && !otherPlayer.hasCardWithRank(rank)){
+                return true;
+            } else if(!hasCardWithRank(rank) && otherPlayer.hasCardWithRank(rank)){
+                return false;
+            }
+        }
+
+        for (Card.Rank rank: Card.Rank.values()){
+            for(Card.Suit suit: Card.Suit.values()){
+                Card card = new Card(suit, rank);
+                if(hand.contains(card) && !otherPlayer.getHand().contains(card)){
+                    return true;
+                } else if(!hand.contains(card) && otherPlayer.getHand().contains(card)){
+                    return false;
+                }
+            }
+        }
+        return false;
+
+    }
+
+    private boolean hasCardWithRank(Card.Rank rank){
+        for(Card card: hand){
+            if(card.getRank().equals(rank)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     private void clearHand(){
         hand.clear();
     }
@@ -115,5 +156,9 @@ public class Player {
 
     public boolean isEliminated() {
         return isEliminated;
+    }
+
+    public List<Card> getHand() {
+        return hand;
     }
 }

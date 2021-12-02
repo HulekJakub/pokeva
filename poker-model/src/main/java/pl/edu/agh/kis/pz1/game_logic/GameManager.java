@@ -2,7 +2,6 @@ package pl.edu.agh.kis.pz1.game_logic;
 
 
 import pl.edu.agh.kis.pz1.game_exceptions.BadMoveException;
-import pl.edu.agh.kis.pz1.game_exceptions.NotEnoughMoneyException;
 import pl.edu.agh.kis.pz1.game_exceptions.NumberOfPlayersOutOfBoundsException;
 import pl.edu.agh.kis.pz1.game_exceptions.PlayerOfThisIdAlreadyExistsException;
 
@@ -37,56 +36,32 @@ public class GameManager {
     private GamePhase gamePhase = GamePhase.ANTE;
     private String currentPlayerId;
 
-    public GameMove stringToGameMove(String s) throws BadMoveException {
-        s = s.toUpperCase();
-        if(!s.matches("^\\w+\\s+\\w+\\s+[A-Z]+\\s+\\d*")){
-            throw new BadMoveException("Move doesn't follow \"PLAYERID GAMEID MOVE PARAMETER\"", true);
-        }
-        return null;
+    public void nextPhase(){
+        gamePhase = gamePhase.nextPhase();
     }
 
-    public String resolveMove(GameMove gameMove){
-
-        switch (gamePhase){
-            case ANTE: resolveAnte(gameMove);break;
-            case BET1: case BET2: resolveBet(gameMove);break;
-            case EXCHANGE_PHASE: resolveExchange(gameMove);break;
-            case ROUND_CLOSURE: resolveRoundClosure(gameMove);break;
-        }
-
+    public void nextPlayer(){
         if (currentPlayerId.equals(playersIds.get(numberOfPlayers - 1))){
             gamePhase = gamePhase.nextPhase();
             currentPlayerId = playersIds.get(0);
         }
-        return null;
     }
 
-    private void mainLoop(){
-        Player winner = null;
-        while(winner == null){
-            winner = winner();
-
-            gamePhase = gamePhase.nextPhase();
-        }
-    }
-
-    private void resolveRoundClosure(GameMove gameMove) {
-    }
-
-    private void resolveExchange(GameMove gameMove) {
-    }
-
-    private void resolveBet(GameMove gameMove) {
-    }
-
-    private void resolveAnte(GameMove gameMove) {
+    public String resolveAnte() {
+        StringBuilder s = new StringBuilder();
         for (String playerId: playersIds){
-            try{
-                game.getPlayer(playerId).betMoney(ante);
-            } catch (NotEnoughMoneyException notEnoughMoney){
-
-            }
+            s.append(game.takeMoney(playerId, ante));
         }
+        return s.toString();
+    }
+
+    public void resolveRoundClosure(GameMove gameMove) {
+    }
+
+    public void resolveExchange(GameMove gameMove) {
+    }
+
+    public void resolveBet(GameMove gameMove) {
     }
 
     private Player winner() {
@@ -108,7 +83,6 @@ public class GameManager {
         }
         return null;
     }
-
 
     public GameManager(String gameId){
         this.gameId = gameId;

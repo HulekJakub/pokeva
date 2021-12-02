@@ -1,5 +1,6 @@
 package pl.edu.agh.kis.pz1.game_logic;
 
+import pl.edu.agh.kis.pz1.communication.GameToken;
 import pl.edu.agh.kis.pz1.game_exceptions.BadMoveException;
 
 import java.util.ArrayList;
@@ -16,11 +17,11 @@ public class GameMove {
     private String parameter;
 
 
-    public GameMove(Game game, String playerId, String gameMoveType, String parameter) throws BadMoveException {
-        this.gameMoveType = GameMoveType.valueOf(gameMoveType);
-        this.playerId = playerId;
+    public GameMove(GameToken token, Game game) throws BadMoveException {
+        this.gameMoveType = GameMoveType.valueOf(token.getGameMoveType());
+        this.playerId = token.getPlayerId();
         this.game = game;
-        setParameter(parameter);
+        setParameter(token.getParameter());
     }
 
     private void setParameter(String parameter) throws BadMoveException {
@@ -57,8 +58,6 @@ public class GameMove {
 
         return true;
     }
-
-
 
     private boolean isExchangeParameterValid(String parameter){
         final String allowedCharacters = "12345";

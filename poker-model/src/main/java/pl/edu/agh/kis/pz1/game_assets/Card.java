@@ -1,5 +1,7 @@
 package pl.edu.agh.kis.pz1.game_assets;
 
+import java.util.Objects;
+
 /**
  * Class implementing a standard card
  * @author jakub
@@ -7,7 +9,7 @@ package pl.edu.agh.kis.pz1.game_assets;
 
 public class Card {
     public enum Suit{HEARTS, DIAMONDS, SPADES, CLUBS}
-    public enum Rank {ACE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING}
+    public enum Rank {ACE, KING, QUEEN, JACK, TEN, NINE, EIGHT, SEVEN, SIX, FIVE, FOUR, THREE, TWO}
 
     private final Suit suit;
     private final Rank rank;
@@ -40,6 +42,11 @@ public class Card {
         if (anotherCard == null || getClass() != anotherCard.getClass()) return false;
         Card card = (Card) anotherCard;
         return suit == card.suit && rank == card.rank;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(suit, rank);
     }
 
     public pl.edu.agh.kis.pz1.game_assets.Card.Rank getRank() {

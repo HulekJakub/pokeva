@@ -1,7 +1,6 @@
 package pl.edu.agh.kis.pz1.game_logic;
 
 import pl.edu.agh.kis.pz1.game_assets.Deck;
-import pl.edu.agh.kis.pz1.game_exceptions.NotEnoughMoneyException;
 import pl.edu.agh.kis.pz1.game_exceptions.NumberOfPlayersOutOfBoundsException;
 import pl.edu.agh.kis.pz1.game_exceptions.PlayerOfThisIdAlreadyExistsException;
 
@@ -15,7 +14,6 @@ public class Game {
     private String startingPlayerId;
     private Map<String, Player> players = new HashMap<>();
     private Deck deck = new Deck(true);
-    private int ante;
     private int tableMoney = 0;
 
 
@@ -51,7 +49,6 @@ public class Game {
             throw new NumberOfPlayersOutOfBoundsException("Invalid number of players: " + players.size(), players.size());
         }
 
-        this.ante = ante;
         for (Player player: players.values()) {
             player.setPlayersMoney(startingMoney);
         }
@@ -83,8 +80,17 @@ public class Game {
         deck.shuffle();
     }
 
-    public void takeMoney(String playerId, int money) throws NotEnoughMoneyException {
-        players.get(playerId).betMoney(money);
+    public String takeMoney(String playerId, int money){
+        String s = players.get(playerId).betMoney(money);
+        if(!s.equals("")){
+            tableMoney += money;
+        }
+        return s;
+    }
+
+    public void giveMoney(String playerId, int money){
+        players.get(playerId).takeMoney(money);
+        tableMoney -= money;
     }
 
     public Player getPlayer(String playerId){
