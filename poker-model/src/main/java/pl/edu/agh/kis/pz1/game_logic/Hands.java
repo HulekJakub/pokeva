@@ -3,7 +3,7 @@ package pl.edu.agh.kis.pz1.game_logic;
 
 import pl.edu.agh.kis.pz1.game_assets.Card;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -109,7 +109,7 @@ public class Hands {
     }
 
     private static Map<Card.Rank, Integer> getRankMap(Player player){
-        Map<Card.Rank, Integer> rankMap = new HashMap<>();
+        Map<Card.Rank, Integer> rankMap = new EnumMap<>(Card.Rank.class);
         for (Card card: player.getHand()){
             Card.Rank rank = card.getRank();
             rankMap.putIfAbsent(rank, 0);
@@ -119,7 +119,7 @@ public class Hands {
     }
 
     private static Map<Card.Suit, Integer> getSuitMap(Player player){
-        Map<Card.Suit, Integer> suitMap = new HashMap<>();
+        Map<Card.Suit, Integer> suitMap = new EnumMap<>(Card.Suit.class);
         for (Card card: player.getHand()){
             Card.Suit suit = card.getSuit();
             suitMap.putIfAbsent(suit, 0);

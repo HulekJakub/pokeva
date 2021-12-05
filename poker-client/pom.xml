@@ -68,7 +68,7 @@
           </descriptorRefs>
           <archive>
             <manifest>
-              <mainClass>pl.edu.agh.kis.pz1.Client</mainClass>
+              <mainClass>pl.edu.agh.kis.pz1.client.ClientApp</mainClass>
             </manifest>
           </archive>
         </configuration>

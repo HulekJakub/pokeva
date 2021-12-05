@@ -32,18 +32,13 @@ public class Player {
         this.playersMoney = playersMoney;
     }
 
-    /**
-     * Changes player money by given value
-     * @param bet int
-     */
-    public String betMoney(int bet){
-        if(bet > playersMoney){
-            pass();
-            return playerId + " has not enough money: forcing a pass.\n";
+
+    public void betMoney(int bet){
+        if(bet == playersMoney){
+            allIn = true;
         }
         betMoney += bet;
         playersMoney -= bet;
-        return "";
     }
 
     public void takeMoney(int toTake){
@@ -63,13 +58,9 @@ public class Player {
      * @param card Card to remove
      * @return true if card existed in the hand prior to its removal
      */
-    public boolean removeCard(Card card)
+    public boolean removeCard(int cardIndex)
     {
-        if(hand.contains(card)){
-            hand.remove(card);
-            return true;
-        }
-        return false;
+        return hand.remove(cardIndex) != null;
     }
 
     /**
@@ -91,20 +82,16 @@ public class Player {
         }
 
         for (Card.Rank rank: Card.Rank.values()){
-            if(hasCardWithRank(rank) && !otherPlayer.hasCardWithRank(rank)){
-                return true;
-            } else if(!hasCardWithRank(rank) && otherPlayer.hasCardWithRank(rank)){
-                return false;
+            if(hasCardWithRank(rank) != otherPlayer.hasCardWithRank(rank)){
+                return hasCardWithRank(rank);
             }
         }
 
         for (Card.Rank rank: Card.Rank.values()){
             for(Card.Suit suit: Card.Suit.values()){
                 Card card = new Card(suit, rank);
-                if(hand.contains(card) && !otherPlayer.getHand().contains(card)){
-                    return true;
-                } else if(!hand.contains(card) && otherPlayer.getHand().contains(card)){
-                    return false;
+                if(hand.contains(card) != otherPlayer.getHand().contains(card)){
+                    return hand.contains(card);
                 }
             }
         }
@@ -146,8 +133,9 @@ public class Player {
         return passed;
     }
 
-    public void pass(){
+    public String pass(){
         this.passed = true;
+        return playerId + " has passed.";
     }
 
     public void setEliminated(boolean eliminated) {

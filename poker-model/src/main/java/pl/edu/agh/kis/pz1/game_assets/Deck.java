@@ -30,14 +30,14 @@ public class Deck {
     }
 
     /**
-     * Returns a Card from the top of the deck
+     * Returns a Card from the top of the deck and removes it
      * If deck is empty returns null
      */
     public Card popFirst()  {
         if(cards.isEmpty()){
             return null;
         }
-        return cards.get(0);
+        return cards.remove(0);
     }
 
     /**

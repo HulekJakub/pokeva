@@ -28,7 +28,7 @@ public class Card {
      * Returns card info as string
      */
     public String toString(){
-        return rank.toString() + " " + suit.toString();
+        return  suit.toString() + " " + rank.toString();
     }
 
     /**

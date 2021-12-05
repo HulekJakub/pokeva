@@ -2,6 +2,8 @@ package pl.edu.agh.kis.pz1.communication;
 
 import pl.edu.agh.kis.pz1.communication.exceptions.BadGameTokenException;
 
+import java.util.Locale;
+
 public class GameToken {
     private final String gameId;
     private final String playerId;
@@ -9,16 +11,26 @@ public class GameToken {
     private final String parameter;
 
     public GameToken(String token) throws BadGameTokenException {
-        token = token.toUpperCase();
-        String[] arguments = token.split(" ");
-
+        String[] arguments = token.split(" +", 4);
         if(!token.matches("^\\w+\\s+\\w+\\s+[A-Z]+\\s+\\d*")){
             throw new BadGameTokenException("Move doesn't follow \"MOVE PARAMETER\" pattern.", true);
         }
+
         gameId = arguments[0];
         playerId = arguments[1];
-        gameMoveType = arguments[2];
-        parameter = arguments[3];
+        gameMoveType = arguments[2].toUpperCase();
+        parameter = arguments[3].toUpperCase();
+    }
+
+    public GameToken(String gameId, String playerId, String gameMoveType, String parameter) throws BadGameTokenException {
+        this.gameId = gameId;
+        this.playerId = playerId;
+        this.gameMoveType = gameMoveType.toUpperCase();
+        this.parameter = parameter.toUpperCase();
+
+        if(!toToken().matches("^\\w+\\s+\\w+\\s+[A-Z]+\\s+\\d*")){
+            throw new BadGameTokenException("Move doesn't follow \"MOVE PARAMETER\" pattern.", true);
+        }
     }
 
 

@@ -31,10 +31,11 @@ public class GameMove {
                     "where empty string means no exchange and digits mean which card to change.", true);
         }
         if(gameMoveType == GameMoveType.BET && !isBetParameterValid(parameter)){
-            throw new BadMoveException("BET move's parameter should be a positive number.\n" +
-                    "If it's greater than your money, move will be changed to ALLIN.", true);
+            throw new BadMoveException("BET move's parameter should be a number greater than minimal bet.\n" +
+                    "If it's greater than your current money, move will be changed to ALLIN.", true);
         }
-        if(parameter.length() != 0 && (gameMoveType == GameMoveType.PASS ||
+        if(parameter.length() != 0 &&
+                (gameMoveType == GameMoveType.PASS ||
                 gameMoveType == GameMoveType.CHECK ||
                 gameMoveType == GameMoveType.ALLIN)){
             this.parameter = parameter;
@@ -45,7 +46,7 @@ public class GameMove {
 
     private boolean isBetParameterValid(String parameter){
         try {
-            if(Integer.parseInt(parameter, 10) <= 0){
+            if(Integer.parseInt(parameter, 10) < 0){
                 return false;
             }
         }
