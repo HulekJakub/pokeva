@@ -121,28 +121,20 @@ public class GameManager {
      * @return message to player to all players
      */
     public String resolveRoundClosure() {
-        Map<String, Integer> playerWins = new HashMap<>();
         List<String> notPassedPlayerIds = new ArrayList<>();
         for (String playerId: playersIds){
             if(!game.getPlayer(playerId).isPassed() && !game.getPlayer(playerId).isEliminated()){
                 notPassedPlayerIds.add(playerId);
             }
         }
-        for(String playerId: notPassedPlayerIds){
-            playerWins.putIfAbsent(playerId, 0);
-            Player player = game.getPlayer(playerId);
-            for (String playerId2: notPassedPlayerIds){
-                Player player2 = game.getPlayer(playerId2);
-                if(!playerId.equals(playerId2) && player.winsWith(player2)){
-                        playerWins.put(playerId, playerWins.get(playerId) + 1);
-                    }
-                }
-        }
+
+        Map<String, Integer> playerWins = getScoreMap(notPassedPlayerIds);
         for(String playerId: notPassedPlayerIds){
             if(playerWins.get(playerId) == notPassedPlayerIds.size() - 1){
                 roundWinner = playerId;
             }
         }
+
         int wonMoney = giveMoneyToWinner();
         game.restartDeckAndPlayers();
         for (String playerId: playersIds){
@@ -153,12 +145,33 @@ public class GameManager {
         return "Player " + roundWinner + " has won and got " + wonMoney + " money.";
     }
 
+    private Map<String, Integer> getScoreMap(List<String> notPassedPlayerIds){
+        Map<String, Integer> playerWins = new HashMap<>();
+
+        for(String playerId: notPassedPlayerIds){
+            playerWins.putIfAbsent(playerId, 0);
+            Player player = game.getPlayer(playerId);
+            for (String playerId2: notPassedPlayerIds){
+                Player player2 = game.getPlayer(playerId2);
+                if(!playerId.equals(playerId2) && player.winsWith(player2)){
+                    playerWins.put(playerId, playerWins.get(playerId) + 1);
+                }
+            }
+        }
+        return playerWins;
+    }
+
     private int giveMoneyToWinner(){
         int res = game.getTableMoney();
         game.giveMoney(roundWinner, game.getTableMoney());
         return res;
     }
 
+    /**
+     * Exchanges players card
+     * @param gameMove gameMove from which needed information is extracted
+     * @return message to print
+     */
     public String resolveExchange(GameMove gameMove) {
         if(gameMove.getParameter().equals("0")){
             return "No cards exchanged";
@@ -182,6 +195,11 @@ public class GameManager {
         return sb.toString();
     }
 
+    /**
+     * Bets players money according to rules
+     * @param gameMove gameMove from which needed information is extracted
+     * @return message to print
+     */
     public String resolveBet(GameMove gameMove) {
         int moneyToBet = 0;
         switch (gameMove.getGameMoveType()){
@@ -205,15 +223,25 @@ public class GameManager {
         return game.takeMoney(currentPlayerId, moneyToBet);
     }
 
+    /**
+     * @return information about player elimination
+     */
     public boolean playerIsEliminated(){
         return game.getPlayer(currentPlayerId).isEliminated();
-
     }
 
+    /**
+     * Checks id player passed or is allin
+     * @return true of false accordingly
+     */
     public boolean playerPassedOrAllIn(){
         return game.getPlayer(currentPlayerId).isAllIn() || game.getPlayer(currentPlayerId).isPassed();
     }
 
+    /**
+     * Minimal legal bet
+     * @return minimal amount of mone that player can bet
+     */
     public int minimalBet() {
         return maxBet() - game.getPlayer(currentPlayerId).getBetMoney();
     }
@@ -226,6 +254,10 @@ public class GameManager {
         return  Collections.max(list);
     }
 
+    /**
+     * Looks for game winner
+     * @return null if none has won yet, Player object otherwise
+     */
     public Player winner() {
         int eliminated = 0;
         String notEliminatedPlayerId = null;
@@ -246,6 +278,10 @@ public class GameManager {
         return null;
     }
 
+    /**
+     *
+     * @return message to print
+     */
     public String passCurrentPlayer(){
         return game.getPlayer(currentPlayerId).pass();
     }
@@ -254,6 +290,12 @@ public class GameManager {
         this.gameId = gameId;
     }
 
+    /**
+     * Creates player
+     * @param playerId String
+     * @return true if succeeded
+     * @throws InvalidPlayerIdException thrown if playerId isn't valid or is already taken
+     */
     public boolean createPlayer(String playerId) throws InvalidPlayerIdException {
         game.addPlayer(playerId);
         return true;

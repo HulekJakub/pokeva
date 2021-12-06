@@ -13,13 +13,6 @@ public class Deck {
     List<Card> cards = new ArrayList<>();
 
     /**
-     * Deck class constructor
-     */
-    public Deck(){
-        generateDeck();
-    }
-
-    /**
      * @param  fill should the constructor fill it
      * Deck class constructor
      */
@@ -38,18 +31,6 @@ public class Deck {
             return null;
         }
         return cards.remove(0);
-    }
-
-    /**
-     * Returns list of cards
-     * @param card Card to put at the end of the deck
-     */
-    public boolean putAtLast(Card card){
-        if(card != null && !cards.contains(card)){
-            cards.add(cards.size(), card);
-            return true;
-        }
-        return false;
     }
 
     /**

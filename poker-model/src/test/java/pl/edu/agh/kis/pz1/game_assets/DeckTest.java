@@ -44,12 +44,6 @@ public class DeckTest {
         assertTrue(true);
     }
 
-    @Test
-    public void putAtLast() {
-        //TODO
-        assertTrue(true);
-    }
-
 
     @Test
     public void generateDeck() {

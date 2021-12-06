@@ -23,15 +23,28 @@ public class Client {
     private String gameId;
     private boolean continuePlaying = true;
 
+    /**
+     * Intializes Client class object and allocates 2048 Bytes of buffer memory
+     */
     public Client() {
         buffer = ByteBuffer.allocate(2048);
         buffer.clear();
     }
 
+    /**
+     * Connects to server
+     * @param hostname hostname
+     * @param port port
+     * @throws IOException IOException
+     */
     public void connectTo(String hostname, int port) throws IOException{
         channel = SocketChannel.open(new InetSocketAddress(hostname, port));
     }
 
+    /**
+     * Main loop that manages communication with server
+     * @throws IOException IOException
+     */
     public void mainLoop() throws IOException {
         String toSend;
         while (continuePlaying){
@@ -44,7 +57,6 @@ public class Client {
                         gameId = messageParts[1];
                         terminalPrinter.print(messageParts[2]);
                         toSend = getInput();
-
                         clientId = toSend;
                         sendMessage(toSend);
                         break;
@@ -57,7 +69,6 @@ public class Client {
                         terminalPrinter.print(messageParts[2] + " " + messageParts[1]);
                         toSend = getInput();
                         sendMessage(toSend);
-
                         break;
                     default:
                         terminalPrinter.print("Got \"" + message + "\"\n And something went wrong.");
@@ -65,7 +76,6 @@ public class Client {
                         break;
                 }
             }
-
         }
         endConnection();
     }
@@ -80,7 +90,7 @@ public class Client {
 
     private void sendConfirmation() throws IOException {
         buffer.clear();
-        buffer.put("confirm".getBytes(StandardCharsets.UTF_8));
+        buffer.put((gameId + " " + clientId + " " + "CONFIRM").getBytes(StandardCharsets.UTF_8));
         buffer.flip();
         channel.write(buffer);
         buffer.clear();

@@ -110,7 +110,7 @@ public class GameServer {
                 }
             }
         }
-        else if(key.isWritable() && isLogged.get((SocketChannel) key.channel()) == null){
+        else if(key.isWritable() && isLogged.get(key.channel()) == null){
             SocketChannel playerChannel = (SocketChannel) key.channel();
             String message = generateMessage(LOGIN, gameManager.getGameId(), "Enter your nickname: ");
             writeToChannel(key, playerChannel, message, true);
@@ -190,8 +190,6 @@ public class GameServer {
 
 
     private void proceedPlayerTurn(SelectionKey key, SocketChannel playerChannel) throws IOException {
-        String gameLog;
-        String message;
         writeToChannel(key, playerChannel, generateMessage(INFO,"",gameManager.printMoneyHandStatus()), false);
         if(gameManager.playerPassedOrAllIn()){
             return;
@@ -199,72 +197,84 @@ public class GameServer {
         switch (gameManager.getGamePhase()){
             case BET1:
             case BET2:
-                String betAsk = "Bet money so it at least equals maximal bet of other player, you can also bet 0 if it is allowed.";
-                message = generateMessage(GAME_MESSAGE, gameManager.minimalBet() + "", betAsk);
-                writeToChannel(key, playerChannel, message, true);
-                while(true){
-                    try{
-                        String clientMessage = readFromChannel(key, playerChannel);
-                        GameToken gameToken = new GameToken(clientMessage);
-                        GameMove gameMove = new GameMove(gameToken, gameManager.getGame());
-
-                        if(gameMove.getGameMoveType() == GameMove.GameMoveType.EXCHANGE){
-                            throw new BadMoveException("You can't exchange cards now.", true);
-                        }
-                        message = generateMessage(INFO, "", gameManager.resolveBet(gameMove));
-                        writeToChannel(key, playerChannel, message, false);
-                        break;
-                    }
-                    catch (BadGameTokenException badGameTokenException){
-                        message = generateMessage(GAME_MESSAGE, gameManager.minimalBet() + "",
-                                badGameTokenException.getMessage() + "\n" + betAsk);
-                        writeToChannel(key, playerChannel, message, badGameTokenException.isAskingForMoveAgain());
-                    }
-                    catch (BadMoveException badMoveException) {
-                        message = generateMessage(GAME_MESSAGE, gameManager.minimalBet() + "",
-                                badMoveException.getMessage() + "\n" + betAsk);
-                        writeToChannel(key, playerChannel, message, badMoveException.isAskingForMoveAgain());
-                    }
-                }
+                proceedBetPhase(key, playerChannel);
                 break;
             case EXCHANGE_PHASE:
-                String exchangeAsk = "Choose cards to exchange, pass corresponding digits or 0 if you are happy with your hand.";
-                message = generateMessage(GAME_MESSAGE, "", exchangeAsk);
-                writeToChannel(key, playerChannel, message, true);
-                while (true){
-                    try{
-                        String clientMessage = readFromChannel(key, playerChannel);
-                        GameToken gameToken = new GameToken(clientMessage);
-                        GameMove gameMove = new GameMove(gameToken, gameManager.getGame());
-
-                        if(gameMove.getGameMoveType() != GameMove.GameMoveType.EXCHANGE){
-                            throw new BadMoveException("You can only exchange cards now.", true);
-                        }
-
-                        message = generateMessage(INFO, "", gameManager.resolveExchange(gameMove));
-                        writeToChannel(key, playerChannel, message, false);
-                        break;
-                    }
-                    catch (BadGameTokenException badGameTokenException){
-                        message = generateMessage(GAME_MESSAGE, "",
-                                badGameTokenException.getMessage() + "\n" + exchangeAsk);
-                        writeToChannel(key, playerChannel, message, badGameTokenException.isAskingForMoveAgain());
-                    }
-                    catch (BadMoveException badMoveException) {
-                        message = generateMessage(GAME_MESSAGE, "",
-                                badMoveException.getMessage() + "\n" + exchangeAsk);
-                        writeToChannel(key, playerChannel, message, badMoveException.isAskingForMoveAgain());
-                    }
-                }
+                proceedExchangePhase(key, playerChannel);
                 break;
             case ANTE:
-                gameLog = gameManager.resolveAnte();
-                message = generateMessage(INFO, gameManager.getAnte() + "", gameLog);
-                writeToChannel(key, playerChannel, message, false);
+                proceedAntePhase(key, playerChannel);
                 break;
             default:
                 break;
 
+        }
+    }
+
+    private void proceedAntePhase(SelectionKey key, SocketChannel playerChannel) throws IOException{
+        String gameLog = gameManager.resolveAnte();
+        String message = generateMessage(INFO, gameManager.getAnte() + "", gameLog);
+        writeToChannel(key, playerChannel, message, false);
+    }
+
+    private void proceedBetPhase(SelectionKey key, SocketChannel playerChannel) throws IOException{
+        String betAsk = "Bet money so it at least equals maximal bet of other player, you can also bet 0 if it is allowed.";
+        String message = generateMessage(GAME_MESSAGE, gameManager.minimalBet() + "", betAsk);
+        writeToChannel(key, playerChannel, message, true);
+        while(true){
+            try{
+                String clientMessage = readFromChannel(key, playerChannel);
+                GameToken gameToken = new GameToken(clientMessage);
+                GameMove gameMove = new GameMove(gameToken, gameManager.getGame());
+
+                if(gameMove.getGameMoveType() == GameMove.GameMoveType.EXCHANGE){
+                    throw new BadMoveException("You can't exchange cards now.", true);
+                }
+                message = generateMessage(INFO, "", gameManager.resolveBet(gameMove));
+                writeToChannel(key, playerChannel, message, false);
+                break;
+            }
+            catch (BadGameTokenException badGameTokenException){
+                message = generateMessage(GAME_MESSAGE, gameManager.minimalBet() + "",
+                        badGameTokenException.getMessage() + "\n" + betAsk);
+                writeToChannel(key, playerChannel, message, badGameTokenException.isAskingForMoveAgain());
+            }
+            catch (BadMoveException badMoveException) {
+                message = generateMessage(GAME_MESSAGE, gameManager.minimalBet() + "",
+                        badMoveException.getMessage() + "\n" + betAsk);
+                writeToChannel(key, playerChannel, message, badMoveException.isAskingForMoveAgain());
+            }
+        }
+    }
+
+    private void proceedExchangePhase(SelectionKey key, SocketChannel playerChannel) throws IOException{
+        String exchangeAsk = "Choose cards to exchange, pass corresponding digits or 0 if you are happy with your hand.";
+        String message = generateMessage(GAME_MESSAGE, "", exchangeAsk);
+        writeToChannel(key, playerChannel, message, true);
+        while (true){
+            try{
+                String clientMessage = readFromChannel(key, playerChannel);
+                GameToken gameToken = new GameToken(clientMessage);
+                GameMove gameMove = new GameMove(gameToken, gameManager.getGame());
+
+                if(gameMove.getGameMoveType() != GameMove.GameMoveType.EXCHANGE){
+                    throw new BadMoveException("You can only exchange cards now.", true);
+                }
+
+                message = generateMessage(INFO, "", gameManager.resolveExchange(gameMove));
+                writeToChannel(key, playerChannel, message, false);
+                break;
+            }
+            catch (BadGameTokenException badGameTokenException){
+                message = generateMessage(GAME_MESSAGE, "",
+                        badGameTokenException.getMessage() + "\n" + exchangeAsk);
+                writeToChannel(key, playerChannel, message, badGameTokenException.isAskingForMoveAgain());
+            }
+            catch (BadMoveException badMoveException) {
+                message = generateMessage(GAME_MESSAGE, "",
+                        badMoveException.getMessage() + "\n" + exchangeAsk);
+                writeToChannel(key, playerChannel, message, badMoveException.isAskingForMoveAgain());
+            }
         }
     }
 
