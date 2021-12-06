@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"pl.edu.agh.kis.pz1.client"},{"l":"pl.edu.agh.kis.pz1.communication"},{"l":"pl.edu.agh.kis.pz1.communication.exceptions"},{"l":"pl.edu.agh.kis.pz1.game_assets"},{"l":"pl.edu.agh.kis.pz1.game_exceptions"},{"l":"pl.edu.agh.kis.pz1.game_logic"},{"l":"pl.edu.agh.kis.pz1.server"}];updateSearchResults();

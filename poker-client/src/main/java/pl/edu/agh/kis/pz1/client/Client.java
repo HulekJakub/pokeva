@@ -9,6 +9,11 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
+import static pl.edu.agh.kis.pz1.communication.CommunicationConstants.*;
+
+/**
+ * Class that manages communication with game server
+ */
 public class Client {
     private static final TerminalPrinter terminalPrinter = new TerminalPrinter();
     private Scanner scanner = new Scanner(System.in);
@@ -27,32 +32,32 @@ public class Client {
         channel = SocketChannel.open(new InetSocketAddress(hostname, port));
     }
 
-    public void mainLoop() throws IOException, InterruptedException {
+    public void mainLoop() throws IOException {
         String toSend;
         while (continuePlaying){
             if(channel.read(buffer) >= 1){
                 String message = getMessageFromBuffer();
-                String[] messageParts = message.split("\\$###\\$", 3);
+                String[] messageParts = message.split(MESSAGE_PARTS_DELIMITER_REGEXP, 3);
 
                 switch (messageParts[0]){
-                    case "LOGIN":
-                    case "RETRY_LOGIN":
+                    case LOGIN:
                         gameId = messageParts[1];
                         terminalPrinter.print(messageParts[2]);
                         toSend = getInput();
-                        terminalPrinter.print("Sending \"" + toSend + "\" to the " + gameId);
+
                         clientId = toSend;
                         sendMessage(toSend);
                         break;
-                    case "INFO":
+                    case INFO:
                         terminalPrinter.print(messageParts[2] + " " + messageParts[1]);
                         sendConfirmation();
                         break;
-                    case "GAME_MESSAGE":
+                    case GAME_MESSAGE:
+                        terminalPrinter.print("Commands: EXCHANGE BET ALLIN CHECK PASS");
                         terminalPrinter.print(messageParts[2] + " " + messageParts[1]);
                         toSend = getInput();
-                        terminalPrinter.print("Sending \"" + toSend + "\" to the " + gameId);
                         sendMessage(toSend);
+
                         break;
                     default:
                         terminalPrinter.print("Got \"" + message + "\"\n And something went wrong.");
@@ -60,7 +65,7 @@ public class Client {
                         break;
                 }
             }
-            Thread.sleep(2000);
+
         }
         endConnection();
     }

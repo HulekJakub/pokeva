@@ -1,7 +1,8 @@
 package pl.edu.agh.kis.pz1.game_exceptions;
 
-import pl.edu.agh.kis.pz1.communication.exceptions.BadGameTokenException;
-
+/**
+ * Exception that indicates bad player input
+ */
 public class BadMoveException extends  Exception{
     private final boolean askForMoveAgain;
     public BadMoveException(String s, boolean askForMoveAgain){

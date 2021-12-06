@@ -55,7 +55,7 @@ public class Player {
 
     /**
      * Removes card from players hand if it exists there
-     * @param card Card to remove
+     * @param cardIndex Card to remove
      * @return true if card existed in the hand prior to its removal
      */
     public boolean removeCard(int cardIndex)
@@ -73,6 +73,11 @@ public class Player {
         betMoney = 0;
     }
 
+    /**
+     * Checks players hands to check who wins
+     * @param otherPlayer other player
+     * @return true if player wins with otherPlayer, otherwise false
+     */
     public boolean winsWith(Player otherPlayer){
         int handComparison = Hands.handType(this).compareTo(Hands.handType(otherPlayer));
         if(handComparison < 0){
@@ -133,6 +138,10 @@ public class Player {
         return passed;
     }
 
+    /**
+     * Passes player
+     * @return Info to print
+     */
     public String pass(){
         this.passed = true;
         return playerId + " has passed.";

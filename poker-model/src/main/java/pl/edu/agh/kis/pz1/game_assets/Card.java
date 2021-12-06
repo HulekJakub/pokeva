@@ -8,7 +8,14 @@ import java.util.Objects;
  */
 
 public class Card {
+    /**
+     * Enum data class to make card handling easier and faster
+     */
     public enum Suit{HEARTS, DIAMONDS, SPADES, CLUBS}
+
+    /**
+     * Enum data class to make card handling easier and faster
+     */
     public enum Rank {ACE, KING, QUEEN, JACK, TEN, NINE, EIGHT, SEVEN, SIX, FIVE, FOUR, THREE, TWO}
 
     private final Suit suit;

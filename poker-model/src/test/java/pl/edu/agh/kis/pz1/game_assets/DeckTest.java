@@ -6,19 +6,15 @@ import java.util.HashSet;
 import java.util.Set;
 import org.junit.Test;
 import static org.junit.Assert.*;
-
+/**
+ * Test class
+ */
 public class DeckTest {
     private Deck deck;
 
     @Before
     public void init(){
         deck = new Deck(true);
-    }
-
-    @Test
-    public void testGenerateDeck(){
-        Set<Card> foundCards = new HashSet<>(deck.getCards());
-        assertEquals(13*4, foundCards.size());
     }
 
     @Test
@@ -42,4 +38,28 @@ public class DeckTest {
         assertTrue(samePosition <=20);
     }
 
+    @Test
+    public void popFirst() {
+        //TODO
+        assertTrue(true);
+    }
+
+    @Test
+    public void putAtLast() {
+        //TODO
+        assertTrue(true);
+    }
+
+
+    @Test
+    public void generateDeck() {
+        Set<Card> foundCards = new HashSet<>(deck.getCards());
+        assertEquals(13*4, foundCards.size());
+    }
+
+    @Test
+    public void resetDeck() {
+        //TODO
+        assertTrue(true);
+    }
 }

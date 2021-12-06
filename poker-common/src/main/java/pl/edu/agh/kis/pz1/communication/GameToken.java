@@ -2,8 +2,9 @@ package pl.edu.agh.kis.pz1.communication;
 
 import pl.edu.agh.kis.pz1.communication.exceptions.BadGameTokenException;
 
-import java.util.Locale;
-
+/**
+ * Class to check if player input is in good format
+ */
 public class GameToken {
     private final String gameId;
     private final String playerId;
@@ -12,14 +13,19 @@ public class GameToken {
 
     public GameToken(String token) throws BadGameTokenException {
         String[] arguments = token.split(" +", 4);
-        if(!token.matches("^\\w+\\s+\\w+\\s+[A-Z]+\\s+\\d*")){
+        if(!token.matches("^\\w+\\s+\\w+\\s+[A-Za-z]+\\s*\\d*")){
             throw new BadGameTokenException("Move doesn't follow \"MOVE PARAMETER\" pattern.", true);
         }
 
         gameId = arguments[0];
         playerId = arguments[1];
         gameMoveType = arguments[2].toUpperCase();
-        parameter = arguments[3].toUpperCase();
+        if (arguments.length < 4) {
+            parameter = "";
+        } else {
+            parameter = arguments[3].toUpperCase();
+        }
+
     }
 
     public GameToken(String gameId, String playerId, String gameMoveType, String parameter) throws BadGameTokenException {
@@ -28,7 +34,7 @@ public class GameToken {
         this.gameMoveType = gameMoveType.toUpperCase();
         this.parameter = parameter.toUpperCase();
 
-        if(!toToken().matches("^\\w+\\s+\\w+\\s+[A-Z]+\\s+\\d*")){
+        if(!toToken().matches("^\\w+\\s+\\w+\\s+[A-Za-z]+\\s+\\d*")){
             throw new BadGameTokenException("Move doesn't follow \"MOVE PARAMETER\" pattern.", true);
         }
     }

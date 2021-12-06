@@ -7,10 +7,21 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Class implementing checking hands for patterns
+ */
 public class Hands {
+    /**
+     * Enum class for comparing hand types
+     */
     public enum Hand{
         ROYALFLUSH, STRAIGHTFLUSH, FOURSAMERANKS, FULLHOUSE, FLUSH, STRAIGHT, THREESAMERANKS, TWOPAIRS, PAIR, NOTHING}
 
+    /**
+     * Checks for hand type
+     * @param player player
+     * @return enum type Hand with computed value
+     */
     public static Hand handType(Player player){
         if (hasRoyalFlush(player))  return Hand.ROYALFLUSH;
         if (hasStraightFlush(player))  return Hand.STRAIGHTFLUSH;
